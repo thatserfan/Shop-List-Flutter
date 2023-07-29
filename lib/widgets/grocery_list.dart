@@ -28,6 +28,10 @@ class _GroceryListState extends State<GroceryList> {
     });
   }
 
+  void _removeItem(int index) {
+    _groceryItems.remove(_groceryItems[index]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +48,18 @@ class _GroceryListState extends State<GroceryList> {
       ),
       body: ListView.builder(
         itemCount: _groceryItems.length,
-        itemBuilder: (ctx, index) => ListTile(
-          title: Text(_groceryItems[index].name),
-          leading:
-              Icon(Icons.square, color: _groceryItems[index].category.color),
-          trailing: Text(
-            _groceryItems[index].quantity.toString(),
+        itemBuilder: (ctx, index) => Dismissible(
+          key: ValueKey(_groceryItems[index].id),
+          onDismissed: (direction) {
+            _removeItem(index);
+          },
+          child: ListTile(
+            title: Text(_groceryItems[index].name),
+            leading:
+                Icon(Icons.square, color: _groceryItems[index].category.color),
+            trailing: Text(
+              _groceryItems[index].quantity.toString(),
+            ),
           ),
         ),
       ),
