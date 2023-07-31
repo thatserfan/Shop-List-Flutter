@@ -38,8 +38,8 @@ class NewItemState extends State<NewItem> {
         ),
       );
 
-      print(response.body);
-      print(response.statusCode);
+      // print(response.body);
+      // print(response.statusCode);
 
       if (!context.mounted) {
         return;
