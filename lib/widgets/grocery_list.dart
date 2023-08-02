@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shop_list/data/categories.dart';
-import 'package:shop_list/models/category.dart';
 import 'package:shop_list/models/grocery_item.dart';
 import 'package:shop_list/widgets/new_item.dart';
 import 'package:http/http.dart' as http;
@@ -71,10 +70,22 @@ class _GroceryListState extends State<GroceryList> {
     });
   }
 
-  void _removeItem(GroceryItem item) {
+  void _removeItem(GroceryItem item) async {
+    final index = _groceryItems.indexOf(item);
     setState(() {
       _groceryItems.remove(item);
     });
+
+    final url = Uri.https('flutter-test-thatserfan-default-rtdb.firebaseio.com',
+        'shopping-list/${item.id}.json');
+
+    final res = await http.delete(url);
+
+    if (res.statusCode >= 400) {
+      setState(() {
+        _groceryItems.insert(index, item);
+      });
+    }
   }
 
   @override
