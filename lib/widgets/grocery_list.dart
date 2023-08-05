@@ -32,6 +32,14 @@ class _GroceryListState extends State<GroceryList> {
         _error = 'Failed to fetch data. Please try again.';
       });
     }
+
+    if (response.body == 'null') {
+      setState(() {
+        _isLoading = false;
+      });
+      return;
+    }
+
     final Map<String, dynamic> listData = json.decode(response.body);
     final List<GroceryItem> loadedItems = [];
     for (final item in listData.entries) {
@@ -82,6 +90,10 @@ class _GroceryListState extends State<GroceryList> {
     final res = await http.delete(url);
 
     if (res.statusCode >= 400) {
+      // ScaffoldMessenger.of(context).clearSnackBars();
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   content: Text('Error fetching!'),
+      // ));
       setState(() {
         _groceryItems.insert(index, item);
       });
